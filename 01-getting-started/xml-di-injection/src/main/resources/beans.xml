@@ -10,7 +10,7 @@
     <bean id="introduceMusician"
           class="com.example.hello_spring.IntroduceMusician"/>
 
-    <bean id="jazzMusician"
+    <bean id="musician"
           class="com.example.hello_spring.JazzMusician">
 
         <property name="introduceMusician"
