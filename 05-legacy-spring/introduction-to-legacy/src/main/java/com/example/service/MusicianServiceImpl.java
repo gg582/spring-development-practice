@@ -16,4 +16,24 @@ public class MusicianServiceImpl implements MusicianService {
 		return musicianMapper.selectAllMusicians();
 	}
 
+	@Override
+	public void register(MusicianVO vo) {
+		musicianMapper.insert(vo); // 매퍼의 insert를 호출
+	}
+
+	@Override
+	public void update(MusicianVO vo) {
+		musicianMapper.update(vo);
+	}
+
+	@Override
+	public void deleteById(Long id) {
+		musicianMapper.deleteById(id); //매퍼의 deleteById를 호출
+	}
+
+	@Override
+	public void deleteByName(String name) {
+		musicianMapper.deleteByName(name);
+	}
+
 }

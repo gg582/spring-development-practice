@@ -13,4 +13,24 @@
             musicians
     </select>
 
+  <insert id="insert">
+    INSERT INTO musicians (name, genre)
+    VALUES (#{name}, #{genre})
+  </insert>
+
+	<update id="update">
+		UPDATE musicians
+		SET name = #{name},
+				genre = #{genre}
+		WHERE id = #{id}
+	</update>
+
+  <delete id="deleteById">
+  DELETE FROM musicians WHERE id = #{id}
+  </delete>
+
+  <delete id="deleteByName">
+    DELETE FROM musicians WHERE name = #{name}
+  </delete>
+
 </mapper>
