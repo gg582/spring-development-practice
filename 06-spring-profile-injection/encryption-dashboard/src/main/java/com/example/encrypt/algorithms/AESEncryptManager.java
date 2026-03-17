@@ -6,6 +6,12 @@ import javax.crypto.spec.IvParameterSpec;
 import java.security.SecureRandom;
 
 public class AESEncryptManager implements EncryptManager {
+
+  @Override
+  public String getAlgorithm() {
+    return "AES";
+  }
+
   // AES 암호화는 여기에서 수행합니다
   @Override
   public byte[] encryptBytes(byte[] data, SecretKey key) throws Exception /* 더 정교한 예외 처리가 동반되어야 합니다 */ {

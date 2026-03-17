@@ -10,6 +10,11 @@ public class ChachaEncryptManager implements EncryptManager {
     private static final String ENCRYPT_ALGO = "ChaCha20-Poly1305";
     public static final int NONCE_LEN = 12;
 
+    @Override
+    public String getAlgorithm() {
+        return "ChaCha20";
+    }
+
     // Nonce가 이미 주어진 경우에 대한 encryptBytes 구현입니다.
     @Override
     public byte[] encryptBytes(byte[] pText, SecretKey key) throws Exception {
