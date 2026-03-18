@@ -2,6 +2,7 @@ package com.example.app.controller;
 
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -38,6 +39,7 @@ public class RestController {
 	@ResponseBody
 	public String encrypt(@RequestPart("fileinfo") String fileinfo, @RequestPart("file") MultipartFile file) {
 		FileSpec spec = new FileSpec();
+		String encryptedString;
 		try {
 			spec.setFromJSON(fileinfo);
 			try (InputStream inputStream = file.getInputStream()) {
@@ -52,7 +54,9 @@ public class RestController {
 				buffer.close();
 				// FileService의 encryptFile 메서드를 호출하여 파일을 암호화합니다.
 				FileService fileService = new FileService();
-				fileService.encryptFile(spec.getFileContent(), spec.getPassword());
+				byte[] encryptedData = fileService.encryptFile(spec.getFileContent(), spec.getPassword());
+				System.out.println("[INFO]: Got password \"" + spec.getPassword() + "\"");
+				encryptedString = new String(encryptedData, StandardCharsets.UTF_8);
 			} catch (Exception e) {
 				return "{ \"error\": \"Error while reading file content\" }";
 			}
@@ -60,7 +64,7 @@ public class RestController {
 			return "{ \"error\": \"Parse Error while processing JSON\" }";
 		}
 		return "{ \"mode\": \"encrypt\", \"algorithm\": \"" + encryptManager.getAlgorithm() + "\", \"filename\": \""
-				+ spec.getFileName() + "\" }";
+				+ spec.getFileName() + "\", \"encrypted\":" + encryptedString + "}";
 	}
 
 	@PostMapping("/decrypt")
