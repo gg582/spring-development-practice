@@ -7,6 +7,7 @@ com/example/app/crypto/algorithms/DecryptManager.class
 com/example/app/crypto/algorithms/ChachaEncryptManager.class
 com/example/app/crypto/factory/FileDecryptorFactory.class
 com/example/app/controller/FileCryptoController.class
+com/example/app/model/FileSpec.class
 com/example/app/crypto/factory/FileEncryptorFactory.class
 com/example/app/crypto/algorithms/AESDecryptManager.class
 com/example/app/crypto/FileDecryptor.class

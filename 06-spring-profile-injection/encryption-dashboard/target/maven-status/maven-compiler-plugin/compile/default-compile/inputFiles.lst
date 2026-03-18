@@ -10,4 +10,5 @@
 /home/yjlee/spring-development-practice/06-spring-profile-injection/encryption-dashboard/src/main/java/com/example/app/crypto/algorithms/EncryptManager.java
 /home/yjlee/spring-development-practice/06-spring-profile-injection/encryption-dashboard/src/main/java/com/example/app/crypto/factory/FileDecryptorFactory.java
 /home/yjlee/spring-development-practice/06-spring-profile-injection/encryption-dashboard/src/main/java/com/example/app/crypto/factory/FileEncryptorFactory.java
+/home/yjlee/spring-development-practice/06-spring-profile-injection/encryption-dashboard/src/main/java/com/example/app/model/FileSpec.java
 /home/yjlee/spring-development-practice/06-spring-profile-injection/encryption-dashboard/src/main/java/com/example/app/service/FileService.java

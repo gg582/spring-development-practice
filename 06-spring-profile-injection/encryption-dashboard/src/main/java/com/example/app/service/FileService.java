@@ -10,11 +10,11 @@ import javax.crypto.SecretKey;
 public class FileService {
     EncryptManager encryptManager;
 
-    public byte[] encryptFile(String content, String b64Password) throws Exception {
+    public byte[] encryptFile(byte[] content, String b64Password) throws Exception {
         this.encryptManager = new FileEncryptorFactory().createFileEncryptor().getEncryptManager();
         byte[] password = java.util.Base64.getDecoder().decode(b64Password);
         SecretKey secretKey = new javax.crypto.spec.SecretKeySpec(password, encryptManager.getAlgorithm());
-        return encryptManager.encryptBytes(content.getBytes(), secretKey);
+        return encryptManager.encryptBytes(content, secretKey);
     }
 
     public EncryptManager getEncryptManager() {

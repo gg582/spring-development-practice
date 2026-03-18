@@ -1,37 +1,79 @@
 package com.example.app.controller;
 
-// ApplicationContext를 로딩하기 위해 반드시 이것이 필요함.
-// 여기서 ApplicationContext 클래스를 가져오기 위한 선행 사항이 임포트된다.
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.ConfigurableApplicationContext;
-// 여기서 Encrypt 내부 모든 클래스를 임포트한다.
-import com.example.app.crypto.*;
-import com.example.app.crypto.FileDecryptor;
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
 
-// 여기서 스프링 구조에서 applicationContext.xml이 위치한 곳을 뒤져서
-// applicationContext.xml이란 파일명을 찾아내는
-// ClassPathXmlApplicationContext를 임포트한다.
-// 이것은 보조적인 지원 도구이므로 support 하위에서 가져온다.
-import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
+import com.example.app.crypto.algorithms.DecryptManager;
+import com.example.app.crypto.algorithms.EncryptManager;
+import com.example.app.model.FileSpec;
+import com.example.app.service.FileService;
+
+@Controller
+@RequestMapping("/api")
 public class RestController {
-    @SuppressWarnings("resource")
-    public static void main(String[] args) {
-        ApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml");
 
-        if (context instanceof ConfigurableApplicationContext) {
-            String[] activeProfiles = ((ConfigurableApplicationContext) context).getEnvironment().getActiveProfiles();
-            System.out.println("Active Spring Profile: " + (activeProfiles.length > 0 ? activeProfiles[0] : "(none)"));
-        }
+	@Autowired
+	private EncryptManager encryptManager;
 
-        // 컨텍스트에 적힌대로 fileEncryptor가 FileEncrypytorService에 대한 이름이다.
-        // 따라서 context.GetBean에서는 fileEncryptor가 이름, FileEncryptor가 실제 타입이 된다.
-        FileEncryptor enc = context.getBean("fileEncryptor", FileEncryptor.class);
-        FileDecryptor dec = context.getBean("fileDecryptor", FileDecryptor.class);
-        // 아직 더미 구현, 향후 서비스 로직 추가되어야 함
-        // TODO: 실제로 Encryption과 Decryption이 제대로 되는지 테스트 케이스 작성 필요
+	@Autowired
+	private DecryptManager decryptManager;
 
-        enc.dummyCheck();
-        dec.dummyCheck();
-    }
+	@GetMapping("/health")
+	@ResponseBody
+	public String health() {
+		return "server=up,encrypt=" + encryptManager.getAlgorithm() + ",decrypt=" + decryptManager.getAlgorithm();
+	}
+
+	@PostMapping("/encrypt")
+	@ResponseBody
+	public String encrypt(@RequestPart("fileinfo") String fileinfo, @RequestPart("file") MultipartFile file) {
+		FileSpec spec = new FileSpec();
+		try {
+			spec.setFromJSON(fileinfo);
+			try (InputStream inputStream = file.getInputStream()) {
+				ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+				byte[] data = new byte[1024];
+				int nRead;
+				while ((nRead = inputStream.read(data, 0, data.length)) != -1) {
+					buffer.write(data, 0, nRead);
+				}
+				buffer.flush();
+				spec.setFileContent(buffer.toByteArray());
+				buffer.close();
+				// FileService의 encryptFile 메서드를 호출하여 파일을 암호화합니다.
+				FileService fileService = new FileService();
+				fileService.encryptFile(spec.getFileContent(), spec.getPassword());
+			} catch (Exception e) {
+				return "{ \"error\": \"Error while reading file content\" }";
+			}
+		} catch (Exception e) {
+			return "{ \"error\": \"Parse Error while processing JSON\" }";
+		}
+		return "{ \"mode\": \"encrypt\", \"algorithm\": \"" + encryptManager.getAlgorithm() + "\", \"filename\": \""
+				+ spec.getFileName() + "\" }";
+	}
+
+	@PostMapping("/decrypt")
+	@ResponseBody
+	public String decrypt(@RequestParam("fileinfo") String fileinfo) {
+		FileSpec spec = new FileSpec();
+		try {
+			spec.setFromJSON(fileinfo);
+		} catch (Exception e) {
+			return "{ \"error\": \"Parse Error while processing JSON\" }";
+		}
+		return "{ \"mode\": \"decrypt\", \"algorithm\": \"" + decryptManager.getAlgorithm() + "\", \"filename\": \""
+				+ spec.getFileName() + "\" }";
+	}
+
 }

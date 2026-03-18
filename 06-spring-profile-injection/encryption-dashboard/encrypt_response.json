@@ -1,0 +1,1 @@
+{ "mode": "encrypt", "algorithm": "AES", "filename": "test.txt" }
