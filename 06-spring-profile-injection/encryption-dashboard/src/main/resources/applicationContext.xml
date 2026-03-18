@@ -8,11 +8,8 @@
 
        <bean id="fileEncryptor"
               factory-bean="fileEncryptorFactory"
-              factory-method="createFileEncryptor"
-              init-method="init" />
-
+				 factory-method="createFileEncryptor" />
        <bean id="fileDecryptor"
               factory-bean="fileDecryptorFactory"
-              factory-method="createFileDecryptor"
-              init-method="init" />
+				 factory-method="createFileDecryptor" />
 </beans>
