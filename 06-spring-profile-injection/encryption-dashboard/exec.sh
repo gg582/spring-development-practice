@@ -2,7 +2,7 @@
 
 ALGO=$1
 
-if [ ALGO -eq "chacha" ]; then
+if [ ALGO == "chacha" ]; then
 	PROFILE=${1:-chacha}
 else
 	PROFILE=${1:-aes}
