@@ -12,11 +12,6 @@ public class SEEDClassLoader {
             try {
                 ClassLoader cl = new URLClassLoader(urls);
                 Class  cls = cl.loadClass("KISA_SEED_CBC");
-                // wtf? 3시간 안에 어떻게 해?
-                /*
-                Method encryptMethod = seedClass.getDeclaredMethos
-                */
-
             } catch(Exception e) {
                 System.out.println("Classloader failed with error: " + e);
             }

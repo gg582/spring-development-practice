@@ -4,6 +4,8 @@ ALGO=$1
 
 if [ ALGO == "chacha" ]; then
 	PROFILE=${1:-chacha}
+elif [ ALGO == "seed" ]; then
+	PROFILE=${1:-seed}
 else
 	PROFILE=${1:-aes}
 fi

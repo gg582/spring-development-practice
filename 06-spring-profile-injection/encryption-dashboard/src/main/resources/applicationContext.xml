@@ -5,6 +5,7 @@
 
        <import resource="applicationContext-aes.xml" />
        <import resource="applicationContext-chacha.xml" />
+       <import resource="applicationContext-seed.xml" />
 
        <bean id="fileEncryptor"
               factory-bean="fileEncryptorFactory"
