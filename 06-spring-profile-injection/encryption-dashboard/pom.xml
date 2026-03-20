@@ -63,7 +63,7 @@
              <artifactId>kisa-seed</artifactId>
              <version>1.0</version>
              <scope>system</scope>
-             <systemPath>${project.basedir}/external/jar/kisa-seed.jar</systemPath>
+             <systemPath>${project.basedir}/external/kisa/kisa-seed.jar</systemPath>
         </dependency>
 
     </dependencies>
