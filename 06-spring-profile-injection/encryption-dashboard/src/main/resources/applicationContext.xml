@@ -3,19 +3,35 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.3.xsd">
 
-       <import resource="applicationContext-aes.xml" />
-       <import resource="applicationContext-chacha.xml" />
-       <import resource="applicationContext-seed.xml" />
+       <!-- 함수명(클래스명)을 직접 수정하여 알고리즘을 변경합니다. -->
+       <!-- AES: com.example.app.crypto.algorithms.AESEncryptManager -->
+       <!-- Chacha: com.example.app.crypto.algorithms.ChachaEncryptManager -->
+       <!-- SEED: com.example.app.crypto.algorithms.SEEDEncryptManager -->
+       <bean id="encryptManager" class="com.example.app.crypto.algorithms.AESEncryptManager" />
+       
+       <!-- 복호화 매니저 -->
+       <!-- AES: com.example.app.crypto.algorithms.AESDecryptManager -->
+       <!-- Chacha: com.example.app.crypto.algorithms.ChachaDecryptManager -->
+       <!-- SEED: com.example.app.crypto.algorithms.SEEDDecryptManager -->
+       <bean id="decryptManager" class="com.example.app.crypto.algorithms.AESDecryptManager" />
+
+       <bean id="fileEncryptorFactory" class="com.example.app.crypto.factory.FileEncryptorFactory">
+           <property name="encryptManager" ref="encryptManager" />
+       </bean>
+       <bean id="fileDecryptorFactory" class="com.example.app.crypto.factory.FileDecryptorFactory">
+           <property name="decryptManager" ref="decryptManager" />
+       </bean>
 
        <bean id="fileEncryptor"
               factory-bean="fileEncryptorFactory"
-				 factory-method="createFileEncryptor" />
+              factory-method="createFileEncryptor" />
        <bean id="fileDecryptor"
               factory-bean="fileDecryptorFactory"
-				 factory-method="createFileDecryptor" />
+              factory-method="createFileDecryptor" />
+
        <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
-	   <property name="maxUploadSize" value="104857600" />
-    	   <property name="maxInMemorySize" value="1048576" />
-    	   <property name="defaultEncoding" value="UTF-8" />
+           <property name="maxUploadSize" value="104857600" />
+           <property name="maxInMemorySize" value="1048576" />
+           <property name="defaultEncoding" value="UTF-8" />
        </bean>
 </beans>

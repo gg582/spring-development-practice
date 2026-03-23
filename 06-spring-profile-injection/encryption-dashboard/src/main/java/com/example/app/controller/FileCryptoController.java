@@ -4,17 +4,26 @@ import java.util.HashMap;
 import java.util.Collections;
 import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.example.app.service.FileService;
 
+@RestController
 public class FileCryptoController {
-    public ResponseEntity<Map<String, Object>> encryptFile(Map<String, String> request) {
+
+    @Autowired
+    private FileService fileService;
+
+    @PostMapping("/file-crypto/encrypt")
+    public ResponseEntity<Map<String, Object>> encryptFile(@RequestBody Map<String, String> request) {
         String content = request.get("content");
         String b64Password = request.get("password");
 
         try {
-            FileService fileService = new FileService();
             byte[] encryptedData = fileService.encryptFile(content.getBytes(), b64Password);
             String b64EncryptedData = java.util.Base64.getEncoder().encodeToString(encryptedData);
 

@@ -193,6 +193,7 @@ public class KISA_SEED_CBC {
 	private static final int KC14 = 0xde6e678d;
 	private static final int KC15 = 0xbcdccf1b;
 	
+	private static final int ABCD_A = 0;
 	private static final int ABCD_B = 1;
 	private static final int ABCD_C = 2;
 	private static final int ABCD_D = 3;

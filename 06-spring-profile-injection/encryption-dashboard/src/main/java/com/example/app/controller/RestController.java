@@ -29,6 +29,9 @@ public class RestController {
 	@Autowired
 	private DecryptManager decryptManager;
 
+	@Autowired
+	private FileService fileService;
+
 	@GetMapping("/health")
 	@ResponseBody
 	public String health() {
@@ -53,7 +56,6 @@ public class RestController {
 				spec.setFileContent(buffer.toByteArray());
 				buffer.close();
 				// FileService의 encryptFile 메서드를 호출하여 파일을 암호화합니다.
-				FileService fileService = new FileService();
 				byte[] encryptedData = fileService.encryptFile(spec.getFileContent(), spec.getPassword());
 				System.out.println("[INFO]: Got password \"" + spec.getPassword() + "\"");
 				encryptedString = new String(encryptedData, StandardCharsets.UTF_8);
